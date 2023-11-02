@@ -11,7 +11,7 @@ export const screenSlice = createSlice({
     initialState,
     reducers:{
         screen:(state,action)=>{
-                state.value=action.payload
+                state.screen=action.payload
         }
 
     }

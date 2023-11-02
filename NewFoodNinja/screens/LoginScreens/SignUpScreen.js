@@ -15,19 +15,23 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {screen} from '../../redux/slice/screenNameSlice';
 import auth from '@react-native-firebase/auth';
-const LoginInScreen = () => {
-  const navigation = useSelector(state => state.screen.screen);
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+const SignUpScreen = () => {
+  const navigation = useNavigation()
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [userInfo, setState] = useState();
   const signInAnonymously = (email, password) => {
     auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
+      .createUserWithEmailAndPassword(email, password)
+      .then(async () => {
+        await AsyncStorage.setItem('Name', name);
         console.log('User account created & signed in!');
       })
-      .then(() => dispatch(screen('HOME')))
+      .then(() => navigation.navigate('1'))
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
           console.log('That email address is already in use!');
@@ -50,9 +54,14 @@ const LoginInScreen = () => {
         />
       </View>
       <View>
-        <Text style={styles.login_text}>Login To Your Account</Text>
+        <Text style={styles.login_text}>Create Your Account</Text>
       </View>
       <View>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          onChangeText={e => setName(e)}
+        />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -70,21 +79,21 @@ const LoginInScreen = () => {
       <Pressable
         onPress={() => signInAnonymously(email, password)}
         style={styles.submit_btn}>
-        <Text>Submit</Text>
+        <Text>Create Account</Text>
       </Pressable>
 
       <View style={{marginTop: 25}}>
-        <Text>Don't Have a Account,yet?</Text>
+        <Text>Already Have a Account?</Text>
 
-        <Pressable onPress={()=>dispatch(screen('SIGNUP'))}>
-          <Text style={styles.signUp}>Sign Up</Text>
+        <Pressable onPress={() => dispatch(screen('MAIN'))}>
+          <Text style={styles.signUp}>Sign In</Text>
         </Pressable>
       </View>
     </View>
   );
 };
 
-export default LoginInScreen;
+export default SignUpScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -119,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#15BE77',
     height: 35,
 
-    paddingHorizontal: 50,
+    paddingHorizontal: 40,
     borderRadius: 10,
   },
   signUp: {alignSelf: 'center', color: '#00A9FF', fontSize: 20, padding: 10},
