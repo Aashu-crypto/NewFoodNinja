@@ -5,6 +5,8 @@ import {
   Text,
   TextInput,
   View,
+  Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
@@ -42,7 +44,10 @@ const LoginInScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      
+      style={styles.container}>
       <View>
         <Image
           source={require('../../assets/img/splashlogo.png')}
@@ -76,11 +81,11 @@ const LoginInScreen = () => {
       <View style={{marginTop: 25}}>
         <Text>Don't Have a Account,yet?</Text>
 
-        <Pressable onPress={()=>dispatch(screen('SIGNUP'))}>
+        <Pressable onPress={() => dispatch(screen('SIGNUP'))}>
           <Text style={styles.signUp}>Sign Up</Text>
         </Pressable>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

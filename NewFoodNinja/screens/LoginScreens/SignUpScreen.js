@@ -5,6 +5,8 @@ import {
   Text,
   TextInput,
   View,
+  Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
@@ -16,9 +18,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {screen} from '../../redux/slice/screenNameSlice';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 const SignUpScreen = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -46,7 +48,7 @@ const SignUpScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <View>
         <Image
           source={require('../../assets/img/splashlogo.png')}
@@ -89,7 +91,7 @@ const SignUpScreen = () => {
           <Text style={styles.signUp}>Sign In</Text>
         </Pressable>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
